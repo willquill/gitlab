@@ -8,6 +8,12 @@ See official documentatation [here](https://docs.gitlab.com/ee/install/docker/in
 
 Rename `.env-sample` to `.env` and put in your values.
 
+Create passwords:
+
+```sh
+echo "$(cat /dev/urandom | tr -dc '[:alnum:]' | head -c 32)" > root_password.txt
+```
+
 ### HTTPS access
 
 I use Traefik as a reverse proxy with a dynamic file provider.
@@ -63,5 +69,5 @@ TCP service:
     gitlab-ssh:
       loadBalancer:
         servers:
-          - address: "10.1.15.11:2222"
+          - address: "10.1.15.12:2222"
 ```

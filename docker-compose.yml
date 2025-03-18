@@ -7,14 +7,19 @@ services:
     restart: always
     hostname: '${HOSTNAME}'
     environment:
-      GITLAB_OMNIBUS_CONFIG: |
-        external_url '${GITLAB_EXTERNAL_URL}:8929'
+      GITLAB_OMNIBUS_CONFIG: "from_file('/omnibus_config.rb')"
+    secrets:
+      - gitlab_root_password  
     ports:
-      - '8929:8929'
-      - '443:443'
+      - '80:80'
+      #- '443:443'
       - '2222:22'
     volumes:
-      - '$GITLAB_HOME/config:/etc/gitlab'
-      - '$GITLAB_HOME/logs:/var/log/gitlab'
-      - '$GITLAB_HOME/data:/var/opt/gitlab'
+      - './config/gitlab/config:/etc/gitlab'
+      - './config/gitlab/logs:/var/log/gitlab'
+      - './config/gitlab/data:/var/opt/gitlab'
     shm_size: '256m'
+
+secrets:
+  gitlab_root_password:
+    file: ./root_password.txt
