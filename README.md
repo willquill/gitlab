@@ -21,7 +21,7 @@ echo "$(cat /dev/urandom | tr -dc '[:alnum:]' | head -c 32)" > secrets/initial_r
   touch secrets/smtp_password
 ```
 
-Populate `secrets/smtp_password` with the right password
+Populate `secrets/smtp_password` with the right password.
 
 ### HTTPS access
 
@@ -79,6 +79,14 @@ TCP service:
       loadBalancer:
         servers:
           - address: "10.1.15.12:2222"
+```
+
+## Ongoing Maintenance
+
+Anytime you need to modify the omnibus config, you can directly edit `gitlab.rb` and then execute the following to allow GitLab to reload its configuration from your local `gitlab.rb`:
+
+```sh
+docker exec -it gitlab gitlab-ctl reconfigure
 ```
 
 ## Troubleshooting
