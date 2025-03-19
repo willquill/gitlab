@@ -1,0 +1,42 @@
+name: gitlab
+
+services:
+  gitlab:
+    image: gitlab/gitlab-ce:17.6.5-ce.0
+    container_name: gitlab
+    restart: always
+    hostname: '${HOSTNAME}'
+    environment:
+      GITLAB_OMNIBUS_CONFIG: "from_file('/omnibus_config.rb')"
+      GITLAB_EXTERNAL_URL: $GITLAB_EXTERNAL_URL
+      SMTP_ADDRESS: $SMTP_ADDRESS
+      SMTP_USER_NAME: $SMTP_USER_NAME
+      SMTP_DOMAIN: $SMTP_DOMAIN
+      EMAIL_FROM: $EMAIL_FROM
+      EMAIL_DISPLAY_NAME: $EMAIL_DISPLAY_NAME
+      EMAIL_REPLY_TO: $EMAIL_REPLY_TO
+      GITLAB_ROOT_EMAIL: $GITLAB_ROOT_EMAIL
+    configs:
+      - source: gitlab
+        target: /omnibus_config.rb
+    secrets:
+      - initial_root_password  
+      - smtp_password
+    ports:
+      - '80:80' # Use traefik to route to this port
+      - '2222:22'
+    volumes:
+      - ./config/config:/etc/gitlab
+      - ./config/logs:/var/log/gitlab
+      - ./config/data:/var/opt/gitlab
+    shm_size: '256m'
+
+configs:
+  gitlab:
+    file: ./gitlab.rb
+
+secrets:
+  initial_root_password:
+    file: ${PWD}/secrets/initial_root_password
+  smtp_password:
+    file: ${PWD}/secrets/smtp_password
