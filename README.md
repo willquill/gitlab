@@ -17,7 +17,7 @@ mkdir -p config logs data secrets
 Create passwords:
 
 ```sh
-echo "$(cat /dev/urandom | tr -dc '[:alnum:]' | head -c 32)" > secrets/initial_root_password.txt &&\
+echo "$(cat /dev/urandom | tr -dc '[:alnum:]' | head -c 32)" > secrets/initial_root_password &&\
   touch secrets/smtp_password
 ```
 

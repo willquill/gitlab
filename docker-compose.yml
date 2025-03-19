@@ -23,8 +23,7 @@ services:
       - initial_root_password  
       - smtp_password
     ports:
-      - '80:80'
-      #- '443:443'
+      - '80:80' # Use traefik to route to this port
       - '2222:22'
     volumes:
       - ./config/config:/etc/gitlab
@@ -38,6 +37,6 @@ configs:
 
 secrets:
   initial_root_password:
-    file: ${PWD}/secrets/initial_root_password.txt
+    file: ${PWD}/secrets/initial_root_password
   smtp_password:
     file: ${PWD}/secrets/smtp_password
