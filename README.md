@@ -8,11 +8,20 @@ See official documentatation [here](https://docs.gitlab.com/ee/install/docker/in
 
 Rename `.env-sample` to `.env` and put in your values.
 
+Create directories:
+
+```sh
+mkdir -p config logs data secrets
+```
+
 Create passwords:
 
 ```sh
-echo "$(cat /dev/urandom | tr -dc '[:alnum:]' | head -c 32)" > root_password.txt
+echo "$(cat /dev/urandom | tr -dc '[:alnum:]' | head -c 32)" > secrets/initial_root_password.txt &&\
+  touch secrets/smtp_password
 ```
+
+Populate `secrets/smtp_password` with the right password
 
 ### HTTPS access
 
@@ -71,3 +80,19 @@ TCP service:
         servers:
           - address: "10.1.15.12:2222"
 ```
+
+## Troubleshooting
+
+- [Forum thread on GitLab in unprivileged LXC](https://forum.proxmox.com/threads/installing-official-gitlab-linux-package-on-unprivileged-container.128810/)
+
+Requires this in gitlab.rb:
+
+```rb
+package['modify_kernel_parameters'] = false
+```
+
+Then just run `docker exec -it gitlab gitlab-ctl reconfigure`
+
+- [nginx settings](https://docs.gitlab.com/omnibus/settings/nginx/)
+
+- To bypass Authentik, go here: `https://<your-url>/users/sign_in?auto_sign_in=false`
