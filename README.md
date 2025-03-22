@@ -81,12 +81,25 @@ TCP service:
           - address: "10.1.15.12:2222"
 ```
 
+## Authentication
+
+Logging in uses OpenID Connect with Authentik as the IdP (provider). Docs are [here](https://docs.gitlab.com/administration/auth/oidc/).
+
+When an Authentik user authenticates in GitLab, they are automatically associated with the GitLab user with the same e-mail address. If the GitLab user *does not exist*, the user will be created through the [OIDC authentication integration](https://docs.gitlab.com/user/profile/account/create_accounts/#create-users-through-authentication-integrations).
+
+
 ## Ongoing Maintenance
 
 Anytime you need to modify the omnibus config, you can directly edit `gitlab.rb` and then execute the following to allow GitLab to reload its configuration from your local `gitlab.rb`:
 
 ```sh
 docker exec -it gitlab gitlab-ctl reconfigure
+```
+
+I save this to a shell script:
+
+```sh
+echo "docker exec -it gitlab gitlab-ctl reconfigure" > recon.sh
 ```
 
 ## Troubleshooting
